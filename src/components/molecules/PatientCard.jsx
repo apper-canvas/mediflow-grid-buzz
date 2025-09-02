@@ -22,32 +22,32 @@ const PatientCard = ({ patient, onView, onEdit }) => {
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="font-semibold text-lg text-gray-900">{patient.name}</h3>
-              <p className="text-sm text-gray-500">ID: {patient.id}</p>
+<h3 className="font-semibold text-lg text-gray-900">{patient.name_c || patient.Name}</h3>
+              <p className="text-sm text-gray-500">ID: {patient.id_c}</p>
             </div>
             <Badge variant={statusVariant}>
-              {patient.status}
+              {patient.status_c}
             </Badge>
           </div>
-          
-          <div className="space-y-2 mb-4 text-sm text-gray-600">
+
+          <div className="space-y-2 text-sm text-gray-600">
             <div className="flex items-center space-x-2">
               <ApperIcon name="Calendar" size={16} />
-              <span>DOB: {new Date(patient.dateOfBirth).toLocaleDateString()}</span>
+              <span>DOB: {patient.date_of_birth_c ? new Date(patient.date_of_birth_c).toLocaleDateString() : 'N/A'}</span>
             </div>
             <div className="flex items-center space-x-2">
               <ApperIcon name="Phone" size={16} />
-              <span>{patient.contact}</span>
+              <span>{patient.contact_c || 'N/A'}</span>
             </div>
-            {patient.currentWard && (
+            {patient.current_ward_c && (
               <div className="flex items-center space-x-2">
                 <ApperIcon name="MapPin" size={16} />
-                <span>{patient.currentWard} - Bed {patient.bedNumber}</span>
+                <span>{patient.current_ward_c} - Bed {patient.bed_number_c}</span>
               </div>
             )}
           </div>
 
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 mt-4">
             <Button variant="outline" size="sm" onClick={() => onView(patient)}>
               <ApperIcon name="Eye" size={16} className="mr-1" />
               View

@@ -20,25 +20,23 @@ const EmergencyPage = () => {
   const [error, setError] = useState("");
   const [showAdmissionForm, setShowAdmissionForm] = useState(false);
   const [triageQueue, setTriageQueue] = useState([]);
-  const [newEmergencyPatient, setNewEmergencyPatient] = useState({
-    name: "",
-    dateOfBirth: "",
-    gender: "",
-    contact: "",
-    emergencyContact: "",
-    bloodType: "",
-    allergies: [],
-    chiefComplaint: "",
-    triagePriority: "Low",
-    vitalSigns: {
-      bloodPressure: "",
-      heartRate: "",
-      temperature: "",
-      respiratoryRate: "",
-      oxygenSaturation: ""
-    },
-    currentWard: "Emergency",
-    status: "Critical"
+const [newEmergencyPatient, setNewEmergencyPatient] = useState({
+    name_c: "",
+    date_of_birth_c: "",
+    gender_c: "",
+    contact_c: "",
+    emergency_contact_c: "",
+    blood_type_c: "",
+    allergies_c: "",
+    chief_complaint_c: "",
+    triage_priority_c: "Low",
+    vital_signs_blood_pressure_c: "",
+    vital_signs_heart_rate_c: "",
+    vital_signs_temperature_c: "",
+    vital_signs_respiratory_rate_c: "",
+    vital_signs_oxygen_saturation_c: "",
+    current_ward_c: "Emergency",
+    status_c: "Critical"
   });
 
   const triagePriorities = [
@@ -58,8 +56,8 @@ const EmergencyPage = () => {
         bedService.getAll()
       ]);
 
-      const emergencyPts = allPatients.filter(p => p.currentWard === "Emergency" || p.status === "Critical");
-      const emergencyBds = allBeds.filter(b => b.ward === "Emergency");
+const emergencyPts = allPatients.filter(p => p.current_ward_c === "Emergency" || p.status_c === "Critical");
+      const emergencyBds = allBeds.filter(b => b.ward_c === "Emergency");
       
       setEmergencyPatients(emergencyPts);
       setEmergencyBeds(emergencyBds);
@@ -89,11 +87,11 @@ const EmergencyPage = () => {
     e.preventDefault();
     try {
       // Find an available emergency bed
-      const availableBed = emergencyBeds.find(bed => bed.status === "Available");
+const availableBed = emergencyBeds.find(bed => bed.status_c === "Available");
       
       const patientData = {
         ...newEmergencyPatient,
-        bedNumber: availableBed ? availableBed.number : "E01"
+        bed_number_c: availableBed ? availableBed.number_c : "E01"
       };
 
       await patientService.create(patientData);
@@ -105,25 +103,23 @@ const EmergencyPage = () => {
 
       toast.success("Emergency patient admitted successfully");
       setShowAdmissionForm(false);
-      setNewEmergencyPatient({
-        name: "",
-        dateOfBirth: "",
-        gender: "",
-        contact: "",
-        emergencyContact: "",
-        bloodType: "",
-        allergies: [],
-        chiefComplaint: "",
-        triagePriority: "Low",
-        vitalSigns: {
-          bloodPressure: "",
-          heartRate: "",
-          temperature: "",
-          respiratoryRate: "",
-          oxygenSaturation: ""
-        },
-        currentWard: "Emergency",
-        status: "Critical"
+setNewEmergencyPatient({
+        name_c: "",
+        date_of_birth_c: "",
+        gender_c: "",
+        contact_c: "",
+        emergency_contact_c: "",
+        blood_type_c: "",
+        allergies_c: "",
+        chief_complaint_c: "",
+        triage_priority_c: "Low",
+        vital_signs_blood_pressure_c: "",
+        vital_signs_heart_rate_c: "",
+        vital_signs_temperature_c: "",
+        vital_signs_respiratory_rate_c: "",
+        vital_signs_oxygen_saturation_c: "",
+        current_ward_c: "Emergency",
+        status_c: "Critical"
       });
       loadEmergencyData();
     } catch (err) {
@@ -134,8 +130,8 @@ const EmergencyPage = () => {
   const handleTriageUpdate = (patientId, newPriority) => {
     setTriageQueue(queue => 
       queue.map(patient => 
-        patient.Id === patientId 
-          ? { ...patient, triagePriority: newPriority }
+patient.Id === patientId 
+          ? { ...patient, triage_priority_c: newPriority }
           : patient
       ).sort((a, b) => {
         const priorityOrder = { "Critical": 0, "High": 1, "Medium": 2, "Low": 3 };
@@ -268,16 +264,16 @@ const EmergencyPage = () => {
                         #{index + 1}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">{patient.name}</p>
-                        <p className="text-sm text-gray-600">ID: {patient.id}</p>
+<p className="font-semibold text-gray-900">{patient.name_c || patient.Name}</p>
+                        <p className="text-sm text-gray-600">ID: {patient.id_c}</p>
                         <p className="text-xs text-gray-500">
                           Wait: {patient.waitTime}min | Arrival: {new Date(patient.arrivalTime).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <select
-                        value={patient.triagePriority}
+<select
+                        value={patient.triage_priority_c}
                         onChange={(e) => handleTriageUpdate(patient.Id, e.target.value)}
                         className="text-xs rounded px-2 py-1 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary"
                       >
@@ -287,8 +283,8 @@ const EmergencyPage = () => {
                           </option>
                         ))}
                       </select>
-                      <Badge variant={triagePriorities.find(p => p.level === patient.triagePriority)?.color}>
-                        {patient.triagePriority}
+<Badge variant={triagePriorities.find(p => p.level === patient.triage_priority_c)?.color}>
+                        {patient.triage_priority_c}
                       </Badge>
                     </div>
                   </motion.div>
@@ -321,19 +317,19 @@ const EmergencyPage = () => {
                       : "border-warning bg-yellow-50"
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold">Bed {bed.number}</span>
-                    <Badge variant={bed.status === "Available" ? "success" : bed.status === "Occupied" ? "error" : "warning"}>
-                      {bed.status}
+<div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold">Bed {bed.number_c}</span>
+                    <Badge variant={bed.status_c === "Available" ? "success" : bed.status_c === "Occupied" ? "error" : "warning"}>
+{bed.status_c}
                     </Badge>
                   </div>
-                  {bed.patientId && (
+                  {bed.patient_id_c && (
                     <p className="text-sm text-gray-600">
-                      Patient: {emergencyPatients.find(p => p.id === bed.patientId)?.name || "Unknown"}
+                      Patient: {emergencyPatients.find(p => p.id_c === bed.patient_id_c)?.name_c || "Unknown"}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500">
-                    Last cleaned: {new Date(bed.lastCleaned).toLocaleDateString()}
+<p className="text-xs text-gray-500">
+                    Last cleaned: {new Date(bed.last_cleaned_c).toLocaleDateString()}
                   </p>
                 </motion.div>
               ))}
@@ -397,22 +393,22 @@ const EmergencyPage = () => {
                   <FormField
                     label="Full Name"
                     required
-                    value={newEmergencyPatient.name}
-                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, name: e.target.value})}
+value={newEmergencyPatient.name_c}
+                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, name_c: e.target.value})}
                   />
                   <FormField
                     label="Date of Birth"
                     type="date"
                     required
-                    value={newEmergencyPatient.dateOfBirth}
-                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, dateOfBirth: e.target.value})}
+value={newEmergencyPatient.date_of_birth_c}
+                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, date_of_birth_c: e.target.value})}
                   />
                   <div className="space-y-2">
                     <Label>Gender *</Label>
                     <select
                       required
-                      value={newEmergencyPatient.gender}
-                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, gender: e.target.value})}
+value={newEmergencyPatient.gender_c}
+                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, gender_c: e.target.value})}
                       className="w-full h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                       <option value="">Select Gender</option>
@@ -424,20 +420,20 @@ const EmergencyPage = () => {
                   <FormField
                     label="Contact Number"
                     required
-                    value={newEmergencyPatient.contact}
-                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, contact: e.target.value})}
+value={newEmergencyPatient.contact_c}
+                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, contact_c: e.target.value})}
                   />
                   <FormField
                     label="Emergency Contact"
                     required
-                    value={newEmergencyPatient.emergencyContact}
-                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, emergencyContact: e.target.value})}
+value={newEmergencyPatient.emergency_contact_c}
+                    onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, emergency_contact_c: e.target.value})}
                   />
                   <div className="space-y-2">
                     <Label>Blood Type</Label>
                     <select
-                      value={newEmergencyPatient.bloodType}
-                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, bloodType: e.target.value})}
+value={newEmergencyPatient.blood_type_c}
+                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, blood_type_c: e.target.value})}
                       className="w-full h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                       <option value="">Select Blood Type</option>
@@ -462,8 +458,8 @@ const EmergencyPage = () => {
                     <Label>Chief Complaint *</Label>
                     <textarea
                       required
-                      value={newEmergencyPatient.chiefComplaint}
-                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, chiefComplaint: e.target.value})}
+value={newEmergencyPatient.chief_complaint_c}
+                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, chief_complaint_c: e.target.value})}
                       className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       rows="3"
                       placeholder="Primary reason for emergency visit..."
@@ -473,8 +469,8 @@ const EmergencyPage = () => {
                     <Label>Triage Priority *</Label>
                     <select
                       required
-                      value={newEmergencyPatient.triagePriority}
-                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, triagePriority: e.target.value})}
+value={newEmergencyPatient.triage_priority_c}
+                      onChange={(e) => setNewEmergencyPatient({...newEmergencyPatient, triage_priority_c: e.target.value})}
                       className="w-full h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                       {triagePriorities.map(priority => (
@@ -494,20 +490,20 @@ const EmergencyPage = () => {
                   <FormField
                     label="Blood Pressure"
                     placeholder="120/80"
-                    value={newEmergencyPatient.vitalSigns.bloodPressure}
+value={newEmergencyPatient.vital_signs_blood_pressure_c}
                     onChange={(e) => setNewEmergencyPatient({
                       ...newEmergencyPatient,
-                      vitalSigns: {...newEmergencyPatient.vitalSigns, bloodPressure: e.target.value}
+                      vital_signs_blood_pressure_c: e.target.value
                     })}
                   />
                   <FormField
                     label="Heart Rate (bpm)"
                     type="number"
                     placeholder="75"
-                    value={newEmergencyPatient.vitalSigns.heartRate}
+value={newEmergencyPatient.vital_signs_heart_rate_c}
                     onChange={(e) => setNewEmergencyPatient({
                       ...newEmergencyPatient,
-                      vitalSigns: {...newEmergencyPatient.vitalSigns, heartRate: e.target.value}
+                      vital_signs_heart_rate_c: e.target.value
                     })}
                   />
                   <FormField
@@ -515,30 +511,30 @@ const EmergencyPage = () => {
                     type="number"
                     step="0.1"
                     placeholder="98.6"
-                    value={newEmergencyPatient.vitalSigns.temperature}
+value={newEmergencyPatient.vital_signs_temperature_c}
                     onChange={(e) => setNewEmergencyPatient({
                       ...newEmergencyPatient,
-                      vitalSigns: {...newEmergencyPatient.vitalSigns, temperature: e.target.value}
+                      vital_signs_temperature_c: e.target.value
                     })}
                   />
                   <FormField
                     label="Respiratory Rate"
                     type="number"
                     placeholder="16"
-                    value={newEmergencyPatient.vitalSigns.respiratoryRate}
+value={newEmergencyPatient.vital_signs_respiratory_rate_c}
                     onChange={(e) => setNewEmergencyPatient({
                       ...newEmergencyPatient,
-                      vitalSigns: {...newEmergencyPatient.vitalSigns, respiratoryRate: e.target.value}
+                      vital_signs_respiratory_rate_c: e.target.value
                     })}
                   />
                   <FormField
                     label="Oxygen Saturation (%)"
                     type="number"
                     placeholder="98"
-                    value={newEmergencyPatient.vitalSigns.oxygenSaturation}
+value={newEmergencyPatient.vital_signs_oxygen_saturation_c}
                     onChange={(e) => setNewEmergencyPatient({
                       ...newEmergencyPatient,
-                      vitalSigns: {...newEmergencyPatient.vitalSigns, oxygenSaturation: e.target.value}
+                      vital_signs_oxygen_saturation_c: e.target.value
                     })}
                   />
                 </div>

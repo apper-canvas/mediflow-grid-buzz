@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SearchBar from "@/components/molecules/SearchBar";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 import { motion } from "framer-motion";
+import { AuthContext } from "@/App";
+
+const LogoutButton = () => {
+  const { logout } = useContext(AuthContext);
+  
+  return (
+    <Button 
+      variant="ghost" 
+      size="sm" 
+      onClick={logout}
+      className="text-gray-600 hover:text-gray-800"
+    >
+      <ApperIcon name="LogOut" size={16} />
+    </Button>
+  );
+};
 
 const Header = ({ onMobileMenuToggle, searchQuery, onSearchChange }) => {
   const [notifications] = useState([
@@ -40,7 +56,7 @@ const Header = ({ onMobileMenuToggle, searchQuery, onSearchChange }) => {
           <div className="relative">
             <Button variant="ghost" size="sm">
               <ApperIcon name="Bell" size={20} />
-              {notifications.length > 0 && (
+{notifications.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {notifications.length}
                 </span>
@@ -56,6 +72,7 @@ const Header = ({ onMobileMenuToggle, searchQuery, onSearchChange }) => {
               <p className="text-sm font-medium text-gray-900">Dr. Sarah Johnson</p>
               <p className="text-xs text-gray-500">Emergency Department</p>
             </div>
+            <LogoutButton />
           </div>
         </div>
       </div>

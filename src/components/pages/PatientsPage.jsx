@@ -24,17 +24,17 @@ const PatientsPage = () => {
   const [error, setError] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newPatient, setNewPatient] = useState({
-    name: "",
-    dateOfBirth: "",
-    gender: "",
-    contact: "",
-    emergencyContact: "",
-    bloodType: "",
-    allergies: [],
-    currentWard: "",
-    bedNumber: "",
-    status: "Stable"
+const [newPatient, setNewPatient] = useState({
+    name_c: "",
+    date_of_birth_c: "",
+    gender_c: "",
+    contact_c: "",
+    emergency_contact_c: "",
+    blood_type_c: "",
+    allergies_c: "",
+    current_ward_c: "",
+    bed_number_c: "",
+    status_c: "Stable"
   });
 
   const loadPatients = async () => {
@@ -58,17 +58,17 @@ const PatientsPage = () => {
       await patientService.create(newPatient);
       toast.success("Patient added successfully");
       setShowAddForm(false);
-      setNewPatient({
-        name: "",
-        dateOfBirth: "",
-        gender: "",
-        contact: "",
-        emergencyContact: "",
-        bloodType: "",
-        allergies: [],
-        currentWard: "",
-        bedNumber: "",
-        status: "Stable"
+setNewPatient({
+        name_c: "",
+        date_of_birth_c: "",
+        gender_c: "",
+        contact_c: "",
+        emergency_contact_c: "",
+        blood_type_c: "",
+        allergies_c: "",
+        current_ward_c: "",
+        bed_number_c: "",
+        status_c: "Stable"
       });
       loadPatients();
     } catch (err) {
@@ -76,27 +76,27 @@ const PatientsPage = () => {
     }
   };
 
-  const handleViewPatient = (patient) => {
-    toast.info(`Viewing patient: ${patient.name}`);
+const handleViewPatient = (patient) => {
+    toast.info(`Viewing patient: ${patient.name_c || patient.Name}`);
   };
 
-  const handleEditPatient = (patient) => {
-    toast.info(`Editing patient: ${patient.name}`);
+const handleEditPatient = (patient) => {
+    toast.info(`Editing patient: ${patient.name_c || patient.Name}`);
   };
 
   const filterPatients = (statusFilter, searchTerm) => {
     let filtered = patients;
     
-    if (statusFilter !== "All") {
-      filtered = filtered.filter(p => p.status === statusFilter);
+if (statusFilter !== "All") {
+      filtered = filtered.filter(p => p.status_c === statusFilter);
     }
     
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(p =>
-        p.name.toLowerCase().includes(term) ||
-        p.id.toLowerCase().includes(term) ||
-        p.contact.includes(term)
+filtered = filtered.filter(p =>
+        (p.name_c || p.Name || '').toLowerCase().includes(term) ||
+        (p.id_c || '').toLowerCase().includes(term) ||
+        (p.contact_c || '').includes(term)
       );
     }
     
@@ -112,10 +112,10 @@ const PatientsPage = () => {
   }, [patients, selectedStatus, searchQuery]);
 
   const statusCounts = {
-    All: patients.length,
-    Critical: patients.filter(p => p.status === "Critical").length,
-    Stable: patients.filter(p => p.status === "Stable").length,
-    Discharged: patients.filter(p => p.status === "Discharged").length
+All: patients.length,
+    Critical: patients.filter(p => p.status_c === "Critical").length,
+    Stable: patients.filter(p => p.status_c === "Stable").length,
+    Discharged: patients.filter(p => p.status_c === "Discharged").length
   };
 
   if (loading) return <Loading variant="grid" />;
@@ -190,22 +190,22 @@ const PatientsPage = () => {
                 <FormField
                   label="Full Name"
                   required
-                  value={newPatient.name}
-                  onChange={(e) => setNewPatient({...newPatient, name: e.target.value})}
+value={newPatient.name_c}
+                  onChange={(e) => setNewPatient({...newPatient, name_c: e.target.value})}
                 />
                 <FormField
                   label="Date of Birth"
                   type="date"
                   required
-                  value={newPatient.dateOfBirth}
-                  onChange={(e) => setNewPatient({...newPatient, dateOfBirth: e.target.value})}
+value={newPatient.date_of_birth_c}
+                  onChange={(e) => setNewPatient({...newPatient, date_of_birth_c: e.target.value})}
                 />
                 <div className="space-y-2">
                   <Label>Gender *</Label>
                   <select
                     required
-                    value={newPatient.gender}
-                    onChange={(e) => setNewPatient({...newPatient, gender: e.target.value})}
+value={newPatient.gender_c}
+                    onChange={(e) => setNewPatient({...newPatient, gender_c: e.target.value})}
                     className="w-full h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   >
                     <option value="">Select Gender</option>
@@ -217,20 +217,20 @@ const PatientsPage = () => {
                 <FormField
                   label="Contact Number"
                   required
-                  value={newPatient.contact}
-                  onChange={(e) => setNewPatient({...newPatient, contact: e.target.value})}
+value={newPatient.contact_c}
+                  onChange={(e) => setNewPatient({...newPatient, contact_c: e.target.value})}
                 />
                 <FormField
                   label="Emergency Contact"
                   required
-                  value={newPatient.emergencyContact}
-                  onChange={(e) => setNewPatient({...newPatient, emergencyContact: e.target.value})}
+value={newPatient.emergency_contact_c}
+                  onChange={(e) => setNewPatient({...newPatient, emergency_contact_c: e.target.value})}
                 />
                 <div className="space-y-2">
                   <Label>Blood Type</Label>
                   <select
-                    value={newPatient.bloodType}
-                    onChange={(e) => setNewPatient({...newPatient, bloodType: e.target.value})}
+value={newPatient.blood_type_c}
+                    onChange={(e) => setNewPatient({...newPatient, blood_type_c: e.target.value})}
                     className="w-full h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   >
                     <option value="">Select Blood Type</option>

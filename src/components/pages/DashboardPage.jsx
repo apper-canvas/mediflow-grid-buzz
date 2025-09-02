@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import StatsCard from "@/components/molecules/StatsCard";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/atoms/Card";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import ApperIcon from "@/components/ApperIcon";
-import Badge from "@/components/atoms/Badge";
-import Button from "@/components/atoms/Button";
-import patientService from "@/services/api/patientService";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/atoms/Card";
+import { toast } from "react-toastify";
 import bedService from "@/services/api/bedService";
 import appointmentService from "@/services/api/appointmentService";
-import { toast } from "react-toastify";
+import patientService from "@/services/api/patientService";
+import ApperIcon from "@/components/ApperIcon";
+import StatsCard from "@/components/molecules/StatsCard";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import Badge from "@/components/atoms/Badge";
+import Button from "@/components/atoms/Button";
 
 const DashboardPage = () => {
   const [stats, setStats] = useState(null);
@@ -30,11 +30,10 @@ const DashboardPage = () => {
         appointmentService.getTodaysAppointments()
       ]);
 
-      const occupiedBeds = beds.filter(bed => bed.status === "Occupied").length;
+const occupiedBeds = beds.filter(bed => bed.status_c === "Occupied").length;
       const totalBeds = beds.length;
-      const criticalPatients = patients.filter(p => p.status === "Critical").length;
-      const availableBeds = beds.filter(bed => bed.status === "Available").length;
-
+      const criticalPatients = patients.filter(p => p.status_c === "Critical").length;
+      const availableBeds = beds.filter(bed => bed.status_c === "Available").length;
       setStats({
         totalPatients: patients.length,
         bedOccupancy: `${occupiedBeds}/${totalBeds}`,
@@ -135,13 +134,13 @@ const DashboardPage = () => {
                     <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
                       <ApperIcon name="User" size={18} className="text-white" />
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{patient.name}</p>
-                      <p className="text-sm text-gray-500">{patient.id}</p>
+<div>
+                      <p className="font-medium text-gray-900">{patient.name_c || patient.Name}</p>
+                      <p className="text-sm text-gray-500">{patient.id_c}</p>
                     </div>
                   </div>
-                  <Badge variant={patient.status.toLowerCase()}>
-                    {patient.status}
+<Badge variant={patient.status_c.toLowerCase()}>
+                    {patient.status_c}
                   </Badge>
                 </motion.div>
               ))}
@@ -166,18 +165,18 @@ const DashboardPage = () => {
                   animate={{ opacity: 1, x: 0 }}
                   className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg hover:shadow-md transition-all duration-200"
                 >
-                  <div>
-                    <p className="font-medium text-gray-900">{appointment.type}</p>
-                    <p className="text-sm text-gray-600">{appointment.department}</p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(appointment.dateTime).toLocaleTimeString('en-US', {
+<div>
+                    <p className="font-medium text-gray-900">{appointment.type_c}</p>
+                    <p className="text-sm text-gray-600">{appointment.department_c}</p>
+<p className="text-xs text-gray-500">
+                      {new Date(appointment.date_time_c).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit'
                       })}
                     </p>
                   </div>
-                  <Badge variant="info">
-                    {appointment.status}
+<Badge variant="info">
+                    {appointment.status_c}
                   </Badge>
                 </motion.div>
               ))}
